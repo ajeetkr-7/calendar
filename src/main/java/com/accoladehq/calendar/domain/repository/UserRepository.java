@@ -1,14 +1,19 @@
 package com.accoladehq.calendar.domain.repository;
 
+import com.accoladehq.calendar.application.common.exceptions.UserNotFoundException;
 import com.accoladehq.calendar.domain.model.User;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface UserRepository {
 
-    User findById(UUID id);
+    Optional<User> findById(@NotNull  UUID id) throws UserNotFoundException;
 
-    void save(User user);
+    User save(@NotNull @Valid User user);
 
-    boolean existsByEmail(String email);
+    boolean existsByEmail(@Email String email);
 }
