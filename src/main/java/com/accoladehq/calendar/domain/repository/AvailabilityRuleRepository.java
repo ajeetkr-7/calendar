@@ -14,7 +14,7 @@ public interface AvailabilityRuleRepository {
 
     AvailabilityRule save(@NotNull @Valid AvailabilityRule availabilityRule);
 
-    List<AvailabilityRule> findAllByUserId(@NotNull @Valid UUID userId);
+    List<AvailabilityRule> findAllByUserId(@NotNull UUID userId);
 
-    Set<TimeInterval> findAllIntervalsByUserIdAndDate(@NotNull @Valid UUID userId, @NotNull @Valid LocalDate availabilityDate);
+    Set<TimeInterval> findAllIntervalsByUserIdAndDate(@NotNull UUID userId, @NotNull LocalDate availabilityDate);
 }

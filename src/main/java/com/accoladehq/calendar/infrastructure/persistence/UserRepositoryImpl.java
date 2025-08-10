@@ -31,7 +31,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean existsById(@NotNull @Valid UUID id) {
+    public boolean existsById(@NotNull UUID id) {
         return jpaRepository.existsById(id);
     }
 

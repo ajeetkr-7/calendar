@@ -30,12 +30,12 @@ public class AvailabilityRuleRepositoryImpl implements AvailabilityRuleRepositor
     }
 
     @Override
-    public List<AvailabilityRule> findAllByUserId(@NotNull @Valid UUID userId) {
+    public List<AvailabilityRule> findAllByUserId(@NotNull UUID userId) {
         return repository.findAllByUserId(userId);
     }
 
     @Override
-    public Set<TimeInterval> findAllIntervalsByUserIdAndDate(@NotNull @Valid UUID userId, @NotNull LocalDate availabilityDate) {
+    public Set<TimeInterval> findAllIntervalsByUserIdAndDate(@NotNull UUID userId, @NotNull LocalDate availabilityDate) {
         return repository.findAllIntervalsByUserIdAndDate(userId, availabilityDate).stream().map(
                 TimeIntervalMapper::from
         ).collect(Collectors.toSet());
