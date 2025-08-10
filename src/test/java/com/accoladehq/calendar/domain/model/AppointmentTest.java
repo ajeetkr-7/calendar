@@ -33,8 +33,7 @@ public class AppointmentTest {
                 .inviteeName("Jane Doe")
                 .inviteeEmail("jane.doe@example.com")
                 .appointmentDate(LocalDate.now().plusDays(1))
-                .startTime(LocalTime.of(9, 0))
-                .endTime(LocalTime.of(10, 0))
+                .duration(new TimeInterval(LocalTime.of(9, 0), LocalTime.of(10, 0)))
                 .build();
     }
 
@@ -82,21 +81,12 @@ public class AppointmentTest {
     }
 
     @Test
-    void nullStartTimeShouldCauseViolation() {
+    void nullDurationShouldCauseViolation() {
         Appointment appointment = buildValidAppointment();
-        appointment.setStartTime(null);
+        appointment.setDuration(null);
         Set<ConstraintViolation<Appointment>> violations = validator.validate(appointment);
         assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("startTime")));
-    }
-
-    @Test
-    void nullEndTimeShouldCauseViolation() {
-        Appointment appointment = buildValidAppointment();
-        appointment.setEndTime(null);
-        Set<ConstraintViolation<Appointment>> violations = validator.validate(appointment);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("endTime")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("duration")));
     }
 
     /// TODO: test case for startTime after endTime combination
@@ -113,8 +103,7 @@ public class AppointmentTest {
         a2.setInviteeName(a1.getInviteeName());
         a2.setInviteeEmail(a1.getInviteeEmail());
         a2.setAppointmentDate(a1.getAppointmentDate());
-        a2.setStartTime(a1.getStartTime());
-        a2.setEndTime(a1.getEndTime());
+        a2.setDuration(a1.getDuration());
         assertEquals(a1, a2);
         assertEquals(a1.hashCode(), a2.hashCode());
     }

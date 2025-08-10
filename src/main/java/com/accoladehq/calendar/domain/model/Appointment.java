@@ -5,10 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -41,10 +38,12 @@ public class Appointment {
     @NotNull(message = "Appointment date cannot be null")
     private LocalDate appointmentDate;
 
-    @NotNull(message = "Start time 'from' cannot be null")
-    private LocalTime startTime;
-
-    @NotNull(message = "End time 'to' cannot be null")
-    private LocalTime endTime;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "startTime", column = @Column(name = "start_time", nullable = false)),
+            @AttributeOverride(name = "endTime", column = @Column(name = "end_time", nullable = false))
+    })
+    @NotNull(message = "Duration cannot be null")
+    private TimeInterval duration;
 
 }

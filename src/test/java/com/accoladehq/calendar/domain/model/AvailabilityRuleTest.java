@@ -33,8 +33,7 @@ public class AvailabilityRuleTest {
                 .id(UUID.randomUUID())
                 .userId(UUID.randomUUID())
                 .weekday(DayOfWeek.MONDAY)
-                .startTime(LocalTime.of(9, 0))
-                .endTime(LocalTime.of(10, 0))
+                .duration(new TimeInterval(LocalTime.of(9, 0), LocalTime.of(17, 0)))
                 .build();
     }
 
@@ -65,21 +64,12 @@ public class AvailabilityRuleTest {
     }
 
     @Test
-    void nullStartTimeShouldCauseViolation() {
+    void nullDurationShouldCauseViolation() {
         AvailabilityRule rule = buildValidRule();
-        rule.setStartTime(null);
+        rule.setDuration(null);
         Set<ConstraintViolation<AvailabilityRule>> violations = validator.validate(rule);
         assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("startTime")));
-    }
-
-    @Test
-    void nullEndTimeShouldCauseViolation() {
-        AvailabilityRule rule = buildValidRule();
-        rule.setEndTime(null);
-        Set<ConstraintViolation<AvailabilityRule>> violations = validator.validate(rule);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("endTime")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("duration")));
     }
 
     /// TODO: test case for startTime after endTime combination
@@ -94,8 +84,7 @@ public class AvailabilityRuleTest {
         r2.setId(r1.getId());
         r2.setUserId(r1.getUserId());
         r2.setWeekday(r1.getWeekday());
-        r2.setStartTime(r1.getStartTime());
-        r2.setEndTime(r1.getEndTime());
+        r2.setDuration(r1.getDuration());
         assertEquals(r1, r2);
         assertEquals(r1.hashCode(), r2.hashCode());
     }
