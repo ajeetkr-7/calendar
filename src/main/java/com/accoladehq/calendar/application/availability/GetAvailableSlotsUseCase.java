@@ -9,5 +9,5 @@ import java.util.UUID;
 
 public interface GetAvailableSlotsUseCase {
 
-    public GetAvailableSlotResponse execute(@NotNull UUID userId, @NotNull LocalDate date) throws UserNotFoundException;
+    GetAvailableSlotResponse execute(@NotNull UUID userId, @NotNull LocalDate date) throws UserNotFoundException;
 }
