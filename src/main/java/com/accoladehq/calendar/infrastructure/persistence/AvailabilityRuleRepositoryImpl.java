@@ -8,7 +8,6 @@ import com.accoladehq.calendar.infrastructure.persistence.jpa.JpaAvailabilityRul
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
 
@@ -32,8 +31,8 @@ public class AvailabilityRuleRepositoryImpl implements AvailabilityRuleRepositor
 
     @Override
     public Set<TimeInterval> findAllIntervalsByUserIdAndDate(@NotNull @Valid UUID userId, @NotNull LocalDate availabilityDate) {
-         return repository.findAllIntervalsByUserIdAndDate(userId, availabilityDate).stream().map(
-                 TimeIntervalMapper::from
-         ).collect(Collectors.toSet());
+        return repository.findAllIntervalsByUserIdAndDate(userId, availabilityDate).stream().map(
+                TimeIntervalMapper::from
+        ).collect(Collectors.toSet());
     }
 }
