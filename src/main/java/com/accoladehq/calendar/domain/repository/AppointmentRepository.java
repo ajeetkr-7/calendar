@@ -11,6 +11,8 @@ public interface AppointmentRepository {
 
     List<Appointment> findAllByUserId(UUID userId);
 
+    List<Appointment> findAllUpcomingByUserId(UUID userId);
+
     List<Appointment> findAllByUserIdAndAppointmentDate(UUID userId, LocalDate appointmentDate);
 
     boolean isTimeSlotAvailable(UUID userId, LocalDate appointmentDate, LocalTime startTime, LocalTime endTime);
