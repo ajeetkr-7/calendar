@@ -15,5 +15,7 @@ public interface UserRepository {
 
     User save(@NotNull @Valid User user);
 
+    boolean existsById(@NotNull UUID id);
+
     boolean existsByEmail(@Email String email);
 }

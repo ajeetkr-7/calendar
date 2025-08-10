@@ -1,11 +1,12 @@
 package com.accoladehq.calendar.application.availability;
 
 import com.accoladehq.calendar.application.common.dto.CreateAvailabilityRuleRequest;
+import com.accoladehq.calendar.application.common.exceptions.UserNotFoundException;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
 public interface CreateAvailabilityRuleUseCase {
 
-    public void execute(@NotNull UUID userId, @NotNull CreateAvailabilityRuleRequest request);
+    public void execute(@NotNull UUID userId, @NotNull CreateAvailabilityRuleRequest request) throws UserNotFoundException;
 }

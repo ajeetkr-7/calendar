@@ -25,6 +25,11 @@ public class AvailabilityRuleRepositoryImpl implements AvailabilityRuleRepositor
     private final JpaAvailabilityRuleRepository repository;
 
     @Override
+    public AvailabilityRule save(@NotNull @Valid AvailabilityRule availabilityRule) {
+        return repository.save(availabilityRule);
+    }
+
+    @Override
     public List<AvailabilityRule> findAllByUserId(@NotNull @Valid UUID userId) {
         return repository.findAllByUserId(userId);
     }
