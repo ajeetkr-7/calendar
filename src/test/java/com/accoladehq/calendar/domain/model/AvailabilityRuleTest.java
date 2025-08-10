@@ -1,0 +1,110 @@
+package com.accoladehq.calendar.domain.model;
+
+import java.util.UUID;
+
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+import jakarta.validation.ConstraintViolation;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.Set;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
+public class AvailabilityRuleTest {
+
+    private Validator validator;
+
+    @BeforeEach
+    void setUp() {
+        try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
+            validator = factory.getValidator();
+        }
+    }
+
+    AvailabilityRule buildValidRule() {
+        return AvailabilityRule.builder()
+                .id(UUID.randomUUID())
+                .userId(UUID.randomUUID())
+                .weekday(DayOfWeek.MONDAY)
+                .startTime(LocalTime.of(9, 0))
+                .endTime(LocalTime.of(10, 0))
+                .build();
+    }
+
+
+    @Test
+    void validRuleShouldHaveNoViolations() {
+        AvailabilityRule rule = buildValidRule();
+        Set<ConstraintViolation<AvailabilityRule>> violations = validator.validate(rule);
+        assertTrue(violations.isEmpty());
+    }
+
+    @Test
+    void nullUserIdShouldCauseViolation() {
+        AvailabilityRule rule = buildValidRule();
+        rule.setUserId(null);
+        Set<ConstraintViolation<AvailabilityRule>> violations = validator.validate(rule);
+        assertFalse(violations.isEmpty());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("userId")));
+    }
+
+    @Test
+    void nullWeekdayShouldCauseViolation() {
+        AvailabilityRule rule = buildValidRule();
+        rule.setWeekday(null);
+        Set<ConstraintViolation<AvailabilityRule>> violations = validator.validate(rule);
+        assertFalse(violations.isEmpty());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("weekday")));
+    }
+
+    @Test
+    void nullStartTimeShouldCauseViolation() {
+        AvailabilityRule rule = buildValidRule();
+        rule.setStartTime(null);
+        Set<ConstraintViolation<AvailabilityRule>> violations = validator.validate(rule);
+        assertFalse(violations.isEmpty());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("startTime")));
+    }
+
+    @Test
+    void nullEndTimeShouldCauseViolation() {
+        AvailabilityRule rule = buildValidRule();
+        rule.setEndTime(null);
+        Set<ConstraintViolation<AvailabilityRule>> violations = validator.validate(rule);
+        assertFalse(violations.isEmpty());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("endTime")));
+    }
+
+    /// TODO: test case for startTime after endTime combination
+    /// TODO: test case for startTime and endTime on the same day
+    /// TODO: test case for startTime and endTime on different days
+    /// TODO: test case for startTime and endTime being whole hours
+
+    @Test
+    void testEqualsAndHashCode() {
+        AvailabilityRule r1 = buildValidRule();
+        AvailabilityRule r2 = buildValidRule();
+        r2.setId(r1.getId());
+        r2.setUserId(r1.getUserId());
+        r2.setWeekday(r1.getWeekday());
+        r2.setStartTime(r1.getStartTime());
+        r2.setEndTime(r1.getEndTime());
+        assertEquals(r1, r2);
+        assertEquals(r1.hashCode(), r2.hashCode());
+    }
+
+    @Test
+    void testNotEquals() {
+        AvailabilityRule r1 = buildValidRule();
+        AvailabilityRule r2 = buildValidRule();
+        r2.setWeekday(DayOfWeek.FRIDAY);
+        assertNotEquals(r1, r2);
+    }
+}
