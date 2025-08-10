@@ -56,7 +56,7 @@ class AvailabilityRuleRepositoryImplTest {
     }
 
     @Test
-    void testSaveAndFindAllByUserId() {
+    void testFindAllByUserId() {
         User user = buildValidUser();
         user = jpaUserRepository.save(user);
 
@@ -87,6 +87,20 @@ class AvailabilityRuleRepositoryImplTest {
                 -> !i.getStartTime().isBefore(rule.getDuration().getStartTime())
                 && !i.getEndTime().isAfter(rule.getDuration().getEndTime())
         ));
+    }
+
+    @Test
+    void testSave() {
+        User user = buildValidUser();
+        user = jpaUserRepository.save(user);
+
+        AvailabilityRule rule = buildValidRule(user.getId());
+        AvailabilityRule savedRule = availabilityRuleRepository.save(rule);
+
+        assertNotNull(savedRule.getId());
+        assertEquals(rule.getUserId(), savedRule.getUserId());
+        assertEquals(rule.getWeekday(), savedRule.getWeekday());
+        assertEquals(rule.getDuration(), savedRule.getDuration());
     }
 
 }

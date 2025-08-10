@@ -70,4 +70,17 @@ class UserRepositoryImplTest {
         assertTrue(userRepository.existsByEmail(user.getEmail()));
         assertFalse(userRepository.existsByEmail("notfound@example.com"));
     }
+
+    // existsById tests
+    @Test
+    void testExistsById_existingUser() {
+        User user = buildValidUser();
+        User saved = userRepository.save(user);
+        assertTrue(userRepository.existsById(saved.getId()));
+    }
+
+    @Test
+    void testExistsById_nonExistingUser() {
+        assertFalse(userRepository.existsById(java.util.UUID.randomUUID()));
+    }
 }
