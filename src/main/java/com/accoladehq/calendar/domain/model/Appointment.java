@@ -2,11 +2,18 @@ package com.accoladehq.calendar.domain.model;
 
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.UUID;
 
-import com.accoladehq.calendar.domain.validation.ValidTimeInterval;
-import jakarta.persistence.*;
+import com.accoladehq.calendar.application.common.annotations.validation.ValidTimeInterval;
+
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

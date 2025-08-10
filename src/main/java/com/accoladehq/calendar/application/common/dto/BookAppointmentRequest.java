@@ -1,12 +1,13 @@
 package com.accoladehq.calendar.application.common.dto;
 
-import com.accoladehq.calendar.domain.validation.ValidTimeInterval;
+import java.time.LocalDate;
+import java.util.UUID;
+
+import com.accoladehq.calendar.application.common.annotations.validation.ValidTimeInterval;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 public record BookAppointmentRequest(
         @NotNull(message = "Owner ID cannot be null")

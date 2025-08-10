@@ -1,4 +1,4 @@
-package com.accoladehq.calendar.domain.validation;
+package com.accoladehq.calendar.application.common.annotations.validation;
 
 import java.lang.annotation.Documented;
 import static java.lang.annotation.ElementType.FIELD;
@@ -10,7 +10,7 @@ import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
 @Documented
-@Constraint(validatedBy = TimeIntervalValidator.class)
+@Constraint(validatedBy = {TimeIntervalValidator.class, TimeIntervalDTOValidator.class})
 @Target({FIELD})
 @Retention(RUNTIME)
 public @interface ValidTimeInterval {

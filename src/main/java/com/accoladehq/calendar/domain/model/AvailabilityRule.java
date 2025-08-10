@@ -2,11 +2,20 @@ package com.accoladehq.calendar.domain.model;
 
 
 import java.time.DayOfWeek;
-import java.time.LocalTime;
 import java.util.UUID;
 
-import com.accoladehq.calendar.domain.validation.ValidTimeInterval;
-import jakarta.persistence.*;
+import com.accoladehq.calendar.application.common.annotations.validation.ValidTimeInterval;
+
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,10 +1,11 @@
-package com.accoladehq.calendar.domain.validation;
-
-import com.accoladehq.calendar.domain.model.TimeInterval;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+package com.accoladehq.calendar.application.common.annotations.validation;
 
 import java.time.temporal.ChronoUnit;
+
+import com.accoladehq.calendar.domain.model.TimeInterval;
+
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class TimeIntervalValidator implements ConstraintValidator<ValidTimeInterval, TimeInterval> {
 
