@@ -1,5 +1,10 @@
 ## Calendar Booking System
 
+### Assumptions
+1. Time slot of 23:00 to 00:00 (next day) is not being considered for simplicity.
+    - this means user can create availability rule for 00:00 to 23:00 on a given day.
+    - and also can book appointment between this time range.
+
 ### UseCases
 **Owner**
 1. owner can set availability

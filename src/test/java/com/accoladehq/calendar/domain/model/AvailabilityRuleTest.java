@@ -72,10 +72,29 @@ public class AvailabilityRuleTest {
         assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("duration")));
     }
 
-    /// TODO: test case for startTime after endTime combination
-    /// TODO: test case for startTime and endTime on the same day
-    /// TODO: test case for startTime and endTime on different days
-    /// TODO: test case for startTime and endTime being whole hours
+    @Test
+    void invalidTimeIntervalShouldCauseViolation() {
+        AvailabilityRule rule = buildValidRule();
+        TimeInterval interval = new TimeInterval();
+        interval.setStartTime(LocalTime.of(9, 30));
+        interval.setEndTime(LocalTime.of(10, 30));
+        rule.setDuration(interval);
+        Set<ConstraintViolation<AvailabilityRule>> violations = validator.validate(rule);
+        assertFalse(violations.isEmpty());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("duration")));
+    }
+
+    @Test
+    void durationLessThanMinShouldCauseViolation() {
+        AvailabilityRule rule = buildValidRule();
+        TimeInterval interval = new TimeInterval();
+        interval.setStartTime(LocalTime.of(9, 0));
+        interval.setEndTime(LocalTime.of(9, 30));
+        rule.setDuration(interval);
+        Set<ConstraintViolation<AvailabilityRule>> violations = validator.validate(rule);
+        assertFalse(violations.isEmpty());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("duration")));
+    }
 
     @Test
     void testEqualsAndHashCode() {

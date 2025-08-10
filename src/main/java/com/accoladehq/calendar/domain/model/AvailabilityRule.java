@@ -5,6 +5,7 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.UUID;
 
+import com.accoladehq.calendar.domain.validation.ValidTimeInterval;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,6 @@ public class AvailabilityRule {
             @AttributeOverride(name = "startTime", column = @Column(name = "start_time", nullable = false)),
             @AttributeOverride(name = "endTime", column = @Column(name = "end_time", nullable = false))
     })
-    @NotNull(message = "Duration cannot be null")
+    @ValidTimeInterval(min = 60, message = "Duration must be 60 minutes")
     private TimeInterval duration;
 }

@@ -89,10 +89,34 @@ public class AppointmentTest {
         assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("duration")));
     }
 
-    /// TODO: test case for startTime after endTime combination
-    /// TODO: test case for startTime and endTime on the same day
-    /// TODO: test case for startTime and endTime on different days
-    /// TODO: test case for startTime and endTime being whole hours
+
+    /// test case for startTime and endTime being whole hours
+    @Test
+    void nonHourAppointmentTimeShouldCauseViolation() {
+        Appointment appointment = buildValidAppointment();
+        TimeInterval interval = new TimeInterval();
+        // minutes are not zero here
+        interval.setStartTime(LocalTime.of(9, 30));
+        interval.setEndTime(LocalTime.of(10, 30));
+        appointment.setDuration(interval);
+        Set<ConstraintViolation<Appointment>> violations = validator.validate(appointment);
+        assertFalse(violations.isEmpty());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("duration")));
+    }
+
+    /// test case for startTime after endTime combination
+    @Test
+    void incorrectDurationShouldCauseViolation() {
+        Appointment appointment = buildValidAppointment();
+        TimeInterval interval = new TimeInterval();
+        // interval is not 60 minutes
+        interval.setStartTime(LocalTime.of(9, 0));
+        interval.setEndTime(LocalTime.of(9, 30));
+        appointment.setDuration(interval);
+        Set<ConstraintViolation<Appointment>> violations = validator.validate(appointment);
+        assertFalse(violations.isEmpty());
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("duration")));
+    }
 
     @Test
     void testEqualsAndHashCode() {
