@@ -19,7 +19,6 @@ import com.accoladehq.calendar.application.common.dto.ListUpcomingAppointmentsRe
 import com.accoladehq.calendar.application.common.exceptions.SlotNotAvailableException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import java.time.LocalDate;
@@ -151,12 +150,29 @@ class AppointmentControllerTest {
     }
 
     @Test
-    void listUpcomingAppointments_invalidOwnerId_throws400() throws Exception {
+    void listUpcomingAppointments_genericException_throws500() throws Exception {
         String ownerId = "invalid-uuid";
         mockMvc.perform(get("/api/appointments")
                         .header("uid", ownerId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors.uid").value("Invalid value: " + ownerId + ". Expected type: UUID"));
+    }
+
+    @Test
+    void listUpcomingAppointments_invalidOwnerId_throws400() throws Exception {
+        UUID ownerId = UUID.randomUUID();
+        AppointmentDTO appointment = new AppointmentDTO(
+                UUID.randomUUID().toString(), ownerId.toString(), "Dave", "dave@example.com",
+                LocalDate.now().plusDays(2), new TimeIntervalDTO(LocalTime.of(9, 0), LocalTime.of(10, 0))
+        );
+
+        var exception = new RuntimeException("Something went wrong");
+        when(listUpcomingAppointmentUseCase.execute(any(UUID.class))).thenThrow(exception);
+        mockMvc.perform(get("/api/appointments")
+                        .header("uid", ownerId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.message").value(exception.getMessage()));
     }
 }
