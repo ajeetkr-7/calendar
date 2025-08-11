@@ -5,6 +5,8 @@ import com.accoladehq.calendar.application.appointment.ListUpcomingAppointmentUs
 import com.accoladehq.calendar.application.common.dto.BookAppointmentRequest;
 import com.accoladehq.calendar.application.common.exceptions.SlotNotAvailableException;
 import com.accoladehq.calendar.presentation.dto.ErrorResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,12 +20,18 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/appointments")
 @RequiredArgsConstructor
+@Tag(name = "Appointment APIs", description = "APIs for listing and booking appointments")
 public class AppointmentController {
 
     private final BookAppointmentUseCase bookAppointmentUseCase;
     private final ListUpcomingAppointmentUseCase listUpcomingAppointmentUseCase;
 
     @GetMapping
+    @Operation(
+        summary = "List Upcoming Appointments",
+        description = "Lists all upcoming appointments for the specified user.",
+        tags = { "Appointment" }
+    )
     public ResponseEntity<?> listUpcomingAppointments(@Valid @RequestHeader("uid") UUID userId) {
         ResponseEntity<?> response;
         try {
@@ -36,6 +44,11 @@ public class AppointmentController {
     }
 
     @PostMapping
+    @Operation(
+        summary = "Book Appointment",
+        description = "Books an appointment for the specified slot and user.",
+        tags = { "Appointment" }
+    )
     public ResponseEntity<?> bookAppointment(@Valid @RequestBody BookAppointmentRequest request) {
         ResponseEntity<?> response;
         try {

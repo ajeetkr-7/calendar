@@ -8,6 +8,8 @@ import com.accoladehq.calendar.application.availability.GetAvailableSlotsUseCase
 import com.accoladehq.calendar.application.common.dto.CreateAvailabilityRuleRequest;
 import com.accoladehq.calendar.application.common.exceptions.UserNotFoundException;
 import com.accoladehq.calendar.presentation.dto.ErrorResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,12 +27,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/availability")
 @RequiredArgsConstructor
+@Tag(name = "Availability APIs", description = "APIs for managing availability rules and fetching available slots")
 public class AvailabilityController {
 
     private final GetAvailableSlotsUseCase getAvailableSlotsUseCase;
     private final CreateAvailabilityRuleUseCase createAvailabilityRuleUseCase;
 
     @GetMapping
+    @Operation(summary = "Get Available Slots for a Schedule Owner on a Specific Date",
+    description = " Use uid: 11111111-1111-1111-1111-111111111111 and any valid date in current week to test this API.")
     public ResponseEntity<?> getAvailableSlots(
             @Valid @RequestHeader("uid") UUID userId,
             @Valid @RequestParam LocalDate date) {
@@ -48,6 +53,10 @@ public class AvailabilityController {
     }
 
     @PostMapping
+    @Operation(
+        summary = "Create Availability Rule",
+        description = "Creates a new availability rule for the specified user."
+    )
     public ResponseEntity<?> createAvailabilityRule(
             @Valid @RequestHeader("uid") UUID userId,
             @Valid @RequestBody CreateAvailabilityRuleRequest request) {
