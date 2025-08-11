@@ -1,4 +1,5 @@
 ## Calendar Booking System
+Built using Spring Boot, Java, and Gradle. The system uses h2 in-memory database with postgresql dialect for development and testing purposes.
 
 ### Assumptions
 1. Time slot of 23:00 to 00:00 (next day) is not being considered for simplicity.
@@ -7,7 +8,11 @@
 2. User can create multiple availability rules for a given day with overlapping time slots.
     - e.g. user can create availability rule for 9AM to 12AM and 10AM to 2PM on a given day.
     - I have incorporated this flexibility by observing cal.com availability rules.
-
+3. By default, two users have been populated using `src/main/resources/data.sql` file.
+    - You can use these users to test the application.
+    - You can modify this file to add more users or change existing ones.
+4. The `User` Entity in the application refers to the schedule owner, i.e. the person who has availability rules set up.
+    - The `Attendee` is the person who books an appointment against the schedule owner's availability. and does not need to have any user creds in the system.
 
 ## Setup and Running Instructions
 
