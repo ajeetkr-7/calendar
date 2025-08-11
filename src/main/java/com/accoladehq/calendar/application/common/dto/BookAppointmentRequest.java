@@ -21,7 +21,6 @@ public record BookAppointmentRequest(
         @NotNull(message = "Appointment date cannot be null")
         @FutureOrPresent(message = "Appointment date must be today or in the future")
         LocalDate appointmentDate,
-        @NotNull(message = "Duration cannot be null")
         @ValidTimeInterval(diff = 60, message = "Duration must be 60 minutes")
         TimeIntervalDTO duration
 ) {
