@@ -8,6 +8,9 @@ import com.accoladehq.calendar.domain.model.AvailabilityRule;
 import com.accoladehq.calendar.domain.model.TimeInterval;
 import com.accoladehq.calendar.domain.repository.AvailabilityRuleRepository;
 import com.accoladehq.calendar.domain.repository.UserRepository;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.UUID;
@@ -20,7 +23,7 @@ public class CreateAvailabilityRuleService implements CreateAvailabilityRuleUseC
     private final UserRepository userRepository;
 
     @Override
-    public void execute(UUID userId, CreateAvailabilityRuleRequest request) throws UserNotFoundException {
+    public void execute(@NotNull UUID userId, @NotNull @Valid CreateAvailabilityRuleRequest request) throws UserNotFoundException {
         // Validate if the user exists
         boolean exists = userRepository.existsById(userId);
         if(!exists) {

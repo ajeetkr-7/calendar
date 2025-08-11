@@ -10,6 +10,8 @@ import com.accoladehq.calendar.domain.model.TimeInterval;
 import com.accoladehq.calendar.domain.model.User;
 import com.accoladehq.calendar.domain.repository.AvailabilityRuleRepository;
 import com.accoladehq.calendar.domain.repository.UserRepository;
+
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
@@ -25,7 +27,7 @@ public class GetAvailableSlotsService implements GetAvailableSlotsUseCase {
     private final UserRepository userRepository;
 
     @Override
-    public GetAvailableSlotResponse execute(UUID userId, LocalDate date) throws UserNotFoundException {
+    public GetAvailableSlotResponse execute(@NotNull UUID userId, @NotNull LocalDate date) throws UserNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
 
