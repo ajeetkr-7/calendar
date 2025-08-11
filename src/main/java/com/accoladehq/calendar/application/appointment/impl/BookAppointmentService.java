@@ -6,10 +6,15 @@ import com.accoladehq.calendar.application.common.dto.AppointmentDTO;
 import com.accoladehq.calendar.application.common.dto.BookAppointmentRequest;
 import com.accoladehq.calendar.application.common.dto.BookAppointmentResponse;
 import com.accoladehq.calendar.application.common.dto.TimeIntervalDTO;
+import com.accoladehq.calendar.application.common.exceptions.InvalidRequestDataException;
 import com.accoladehq.calendar.application.common.exceptions.SlotNotAvailableException;
+import com.accoladehq.calendar.application.common.exceptions.UserNotFoundException;
 import com.accoladehq.calendar.domain.model.Appointment;
 import com.accoladehq.calendar.domain.model.TimeInterval;
+import com.accoladehq.calendar.domain.model.User;
 import com.accoladehq.calendar.domain.repository.AppointmentRepository;
+import com.accoladehq.calendar.domain.repository.UserRepository;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -18,9 +23,15 @@ import lombok.RequiredArgsConstructor;
 public class BookAppointmentService implements BookAppointmentUseCase {
 
     private final AppointmentRepository appointmentRepository;
+    private final UserRepository userRepository;
 
     @Override
-    public BookAppointmentResponse execute(@Valid BookAppointmentRequest request) throws SlotNotAvailableException {
+    public BookAppointmentResponse execute(@Valid BookAppointmentRequest request) throws InvalidRequestDataException, SlotNotAvailableException, UserNotFoundException {
+        User user = userRepository.findById(request.ownerId())
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + request.ownerId()));
+        if (user.getEmail().equals(request.inviteeEmail())){
+                throw new InvalidRequestDataException("Invitee email cannot be the same as the owner's email.");
+        }
         // create a new appointment from the request
         var appointment = Appointment.builder()
                 .userId(request.ownerId())

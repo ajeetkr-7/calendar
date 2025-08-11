@@ -7,9 +7,11 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import jakarta.validation.ConstraintViolationException;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,10 +20,14 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import com.accoladehq.calendar.application.common.dto.BookAppointmentRequest;
 import com.accoladehq.calendar.application.common.dto.BookAppointmentResponse;
 import com.accoladehq.calendar.application.common.dto.TimeIntervalDTO;
+import com.accoladehq.calendar.application.common.exceptions.InvalidRequestDataException;
 import com.accoladehq.calendar.application.common.exceptions.SlotNotAvailableException;
+import com.accoladehq.calendar.application.common.exceptions.UserNotFoundException;
 import com.accoladehq.calendar.domain.model.Appointment;
 import com.accoladehq.calendar.domain.model.TimeInterval;
+import com.accoladehq.calendar.domain.model.User;
 import com.accoladehq.calendar.domain.repository.AppointmentRepository;
+import com.accoladehq.calendar.domain.repository.UserRepository;
 
 @SpringBootTest
 class BookAppointmentServiceTest {
@@ -30,7 +36,10 @@ class BookAppointmentServiceTest {
     private BookAppointmentService service;
 
     @MockitoBean
-    private AppointmentRepository repository;
+    private AppointmentRepository appointmentRepository;
+
+    @MockitoBean
+    private UserRepository userRepository;
 
     BookAppointmentRequest buildValidRequest() {
         return new BookAppointmentRequest(
@@ -43,10 +52,13 @@ class BookAppointmentServiceTest {
     }
 
     @Test
-    void testExecuteReturnsResponseWhenSlotAvailable() throws SlotNotAvailableException {
+    void testExecuteReturnsResponseWhenSlotAvailable() throws SlotNotAvailableException, InvalidRequestDataException, UserNotFoundException {
         BookAppointmentRequest request = buildValidRequest();
+        User user = new User(request.ownerId(), "Jane Doe", "jane.doe@example.com");
 
-        when(repository.isTimeSlotAvailable(
+        when(userRepository.findById(request.ownerId())).thenReturn(Optional.of(user));
+
+        when(appointmentRepository.isTimeSlotAvailable(
                 request.ownerId(),
                 request.appointmentDate(),
                 request.duration().startTime(),
@@ -62,7 +74,7 @@ class BookAppointmentServiceTest {
                 .duration(new TimeInterval(request.duration().startTime(), request.duration().endTime()))
                 .build();
 
-        when(repository.save(org.mockito.ArgumentMatchers.any(Appointment.class)))
+        when(appointmentRepository.save(org.mockito.ArgumentMatchers.any(Appointment.class)))
                 .thenReturn(savedAppointment);
 
         BookAppointmentResponse response = service.execute(request);
@@ -78,11 +90,34 @@ class BookAppointmentServiceTest {
         assertEquals(savedAppointment.getDuration().getEndTime(), response.appointment().duration().endTime());
     }
 
+    // Test for UserNotFoundException
     @Test
-    void testExecuteThrowsSlotNotAvailableException() {
+    void testExecuteThrowsUserNotFoundException() throws UserNotFoundException {
         BookAppointmentRequest request = buildValidRequest();
+        when(userRepository.findById(request.ownerId())).thenReturn(Optional.empty());
 
-        when(repository.isTimeSlotAvailable(
+        assertThrows(UserNotFoundException.class, () -> service.execute(request));
+    }
+
+    // Test for InvalidRequestDataException when invitee email is the same as owner's email
+    @Test
+    void testExecuteThrowsInvalidRequestDataExceptionForSameEmail() throws UserNotFoundException {
+        BookAppointmentRequest request = buildValidRequest();
+        User user = new User(request.ownerId(), "John Doe", "john.doe@example.com");
+
+        when(userRepository.findById(request.ownerId())).thenReturn(Optional.of(user));
+        
+        assertThrows(InvalidRequestDataException.class, () -> service.execute(request));
+    }
+
+    @Test
+    void testExecuteThrowsSlotNotAvailableException() throws UserNotFoundException {
+        BookAppointmentRequest request = buildValidRequest();
+        User user = new User(request.ownerId(), "Jane Doe", "jane.doe@example.com");
+
+        when(userRepository.findById(request.ownerId())).thenReturn(Optional.of(user));
+
+        when(appointmentRepository.isTimeSlotAvailable(
                 request.ownerId(),
                 request.appointmentDate(),
                 request.duration().startTime(),
