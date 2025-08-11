@@ -23,7 +23,7 @@ Built using Spring Boot, Java, and Gradle. The system uses h2 in-memory database
 ### Build and Run
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/ajeetkr-7/calendar.git
    cd calendar
    ```
 2. Build the project:
