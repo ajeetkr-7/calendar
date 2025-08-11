@@ -50,6 +50,13 @@ To run tests:
 ./gradlew test
 ```
 
+### API Endpoints
+Refer to this [Postman Collection](https://documenter.getpostman.com/view/20218768/2sB3BEnVfJ) for examples of API requests and responses.
+1. `POST /api/appointments/book` - Book an appointment against an available slot of the schedule owner. you will pass the owner id (`ownerId`) in the request body. 
+2. `GET /api/appointments` - Endpoint enabling schedule owner to view all the upcoming appointments. pass the owner id (`uid`) as header
+3. `POST /api/availability` - Schedule owner can create an availability rule using this endpoing. pass the owner id (`uid`) as header
+4. `GET /api/availability` - Get all available slots of the schedule owner. pass the owner id (`uid`) as header
+
 ## Feature Breakdown
 ### UseCases
 **Owner**
