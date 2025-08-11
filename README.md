@@ -49,6 +49,8 @@ To run tests:
 ```bash
 ./gradlew test
 ```
+![Test Coverage](test-coverage.png)
+
 
 ### API Endpoints
 Refer to this [Postman Collection](https://documenter.getpostman.com/view/20218768/2sB3BEnVfJ) for examples of API requests and responses.
