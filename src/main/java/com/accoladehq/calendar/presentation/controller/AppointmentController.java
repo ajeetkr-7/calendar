@@ -4,6 +4,7 @@ import com.accoladehq.calendar.application.appointment.BookAppointmentUseCase;
 import com.accoladehq.calendar.application.appointment.ListUpcomingAppointmentUseCase;
 import com.accoladehq.calendar.application.common.dto.BookAppointmentRequest;
 import com.accoladehq.calendar.application.common.exceptions.SlotNotAvailableException;
+import com.accoladehq.calendar.presentation.dto.ErrorResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,7 @@ public class AppointmentController {
             response = ResponseEntity.ok(listUpcomingAppointmentUseCase.execute(userId));
         } catch (Exception e) {
             log.error(e.getMessage());
-            response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            response = new ResponseEntity<>(ErrorResponse.from(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return response;
     }
@@ -40,10 +41,10 @@ public class AppointmentController {
         try {
             response = ResponseEntity.status(HttpStatus.CREATED).body(bookAppointmentUseCase.execute(request));
         } catch (SlotNotAvailableException e) {
-            response = new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            response = new ResponseEntity<>(ErrorResponse.from(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             log.error(e.getMessage());
-            response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            response = new ResponseEntity<>(ErrorResponse.from(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return response;
     }

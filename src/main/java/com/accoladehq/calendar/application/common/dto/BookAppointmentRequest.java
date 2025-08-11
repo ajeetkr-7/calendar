@@ -7,12 +7,13 @@ import com.accoladehq.calendar.application.common.annotations.validation.ValidTi
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record BookAppointmentRequest(
         @NotNull(message = "Owner ID cannot be null")
         UUID ownerId,
-        @NotNull(message = "Invitee name cannot be null")
+        @NotBlank(message = "Invitee name cannot be blank")
         String inviteeName,
         @NotNull(message = "Invitee email cannot be null")
         @Email(message = "Invitee email should be valid")
