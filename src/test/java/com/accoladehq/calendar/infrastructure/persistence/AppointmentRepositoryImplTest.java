@@ -36,6 +36,8 @@ class AppointmentRepositoryImplTest {
     void setUp() {
         jpaAppointmentRepository.deleteAll();
         jpaAppointmentRepository.flush();
+        jpaUserRepository.deleteAll();
+        jpaUserRepository.flush();
     }
 
     Appointment buildValidAppointment(UUID userId) {

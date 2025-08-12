@@ -18,7 +18,7 @@ public interface JpaAppointmentRepository extends JpaRepository<Appointment, UUI
             "SELECT a FROM Appointment a "
             + "WHERE a.userId = :userId "
             + "AND a.appointmentDate >= CURRENT_DATE "
-            + "AND (a.duration.startTime > CURRENT_TIME) "
+            + "AND (a.appointmentDate >= CURRENT_DATE OR a.duration.startTime > CURRENT_TIME) "
             + "ORDER BY a.appointmentDate, a.duration.startTime"
     )
     List<Appointment> findAllUpcomingByUserId(UUID userId);
